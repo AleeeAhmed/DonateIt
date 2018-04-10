@@ -137,6 +137,7 @@ public class FragDonorMessages extends Fragment {
                 });
             } catch (JSONException e) {
                 e.printStackTrace();
+
             }
         }
     }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_requests_donor_dashboard"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Requests" />
+        <item
+            android:id="@+id/nav_saved_donor_dashboard"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Saved Requests" />
+
+        <item
+            android:id="@+id/nav_messages_donor_dashboard"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Messages" />
+    </group>
+
+    <item android:title="Application">
+        <menu>
+            <item
+                android:id="@+id/nav_settings_donor_dashboard"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Settings" />
+            <item
+                android:id="@+id/nav_logout_donor_dashboard"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Logout" />
+        </menu>
+    </item>
+
+</menu>

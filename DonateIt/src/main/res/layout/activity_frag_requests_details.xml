@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:padding="11dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="false"
+    tools:context="com.example.android.fyp.FragRequestsDetails">
+
+
+    <TextView
+        android:id="@+id/tvTitleLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        android:layout_marginTop="7dp"
+
+        />
+    <TextView
+        android:id="@+id/tvTitle_RequestDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvTitleLabel"
+        android:text="Title"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        android:layout_marginTop="3dp"
+        />
+
+    <TextView
+        android:id="@+id/tvDescLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Description"
+        android:layout_marginTop="7dp"
+        android:layout_below="@+id/tvTitle_RequestDetails"
+
+        />
+    <TextView
+        android:id="@+id/tvDesc_RequestDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvDescLabel"
+        android:text="Desc"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        android:layout_marginTop="3dp"
+        />
+
+    <TextView
+        android:id="@+id/tvProgresLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Progress"
+        android:layout_below="@+id/tvDesc_RequestDetails"
+        android:layout_marginTop="7dp"
+
+        />
+    <TextView
+        android:id="@+id/tvProgress_RequestDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvProgresLabel"
+        android:text="Progress"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        android:layout_marginTop="3dp"
+        />
+
+    <TextView
+        android:id="@+id/tvTargetLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Target"
+        android:layout_below="@+id/tvProgress_RequestDetails"
+        android:layout_marginTop="7dp"
+
+        />
+    <TextView
+        android:id="@+id/tvTarget_RequestDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvTargetLabel"
+        android:text="Target"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        android:layout_marginTop="3dp"
+        />
+
+
+    <TextView
+        android:id="@+id/tvOfferAmountLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Offer Amount"
+        android:layout_below="@+id/tvTarget_RequestDetails"
+        android:layout_marginTop="7dp"
+
+        />
+    <EditText
+        android:id="@+id/tvOfferAmount_RequestDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvOfferAmountLabel"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        android:layout_marginTop="3dp"
+        android:inputType="number"
+        />
+
+    <Button
+        android:id="@+id/btnSendOffer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Offer"
+        android:layout_below="@+id/tvOfferAmount_RequestDetails"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:layout_marginTop="17dp  "
+        />
+</RelativeLayout>

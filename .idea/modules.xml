@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/DonateIt/DonateIt.iml" filepath="$PROJECT_DIR$/DonateIt/DonateIt.iml" />
+      <module fileurl="file://E:\WaqarProject\waqarCode\fyp-master\FYP.iml" filepath="E:\WaqarProject\waqarCode\fyp-master\FYP.iml" />
+      <module fileurl="file://C:\Users\HP\Desktop\FYP\DonateIt\app.iml" filepath="C:\Users\HP\Desktop\FYP\DonateIt\app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fyp-master.iml" filepath="$PROJECT_DIR$/fyp-master.iml" />
+    </modules>
+  </component>
+</project>

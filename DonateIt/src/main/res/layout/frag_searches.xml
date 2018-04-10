@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/saved_searches_t"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="Saved Searches"
+        android:textColor="@color/black"
+        android:textSize="25dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"/>
+
+    <ListView
+        android:id="@+id/saved_searches_l"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_below="@+id/saved_searches_t"
+        android:layout_marginLeft="15dp">
+
+    </ListView>
+
+    <TextView
+        android:id="@+id/categories"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="Categories"
+        android:textSize="25dp"
+        android:textColor="@color/black"
+        android:layout_below="@+id/saved_searches_l"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"/>
+    <ListView
+        android:id="@+id/categories_l"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_below="@+id/categories"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="5dp">
+
+    </ListView>
+
+</RelativeLayout>

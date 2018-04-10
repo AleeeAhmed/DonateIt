@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/requests"
+            android:icon="@drawable/requests"
+            android:title="Requests" />
+        <item
+            android:id="@+id/messages"
+            android:icon="@drawable/messages"
+            android:title="Messages" />
+        <item
+            android:id="@+id/inivitations"
+            android:icon="@drawable/invitation"
+            android:title="Invitations" />
+        <item
+            android:id="@+id/donationHistory"
+            android:icon="@drawable/history"
+            android:title="Donation History" />
+
+    </group>
+
+    <item android:title="Application">
+        <menu>
+            <item
+                android:id="@+id/settnigs"
+                android:icon="@drawable/settings"
+                android:title="Settings" />
+            <item
+                android:id="@+id/about"
+                android:icon="@drawable/about"
+                android:title="About" />
+        </menu>
+    </item>
+
+</menu>

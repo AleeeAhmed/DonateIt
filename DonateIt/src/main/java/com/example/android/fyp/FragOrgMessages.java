@@ -2,16 +2,33 @@ package com.example.android.fyp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
 
 /**
  * Created by HP on 1/25/2018.
@@ -19,65 +36,163 @@ import android.widget.TextView;
 
 public class FragOrgMessages extends Fragment {
     ListView list;
+    ArrayList<FragDonorMessagesData> dataArrayList = new ArrayList<>();
+    MyAdapter adapter;
+    SharedPreferences preferences;
+    String currentURL;
+    View view;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.org_messages, container, false);
-        list = (ListView) view.findViewById(R.id.list);
+        list = (ListView) view.findViewById(R.id.lvOrgMessages);
 
-        String[] names = {"Abid", "Sajid", "Saleem", "Shahid Ullah", "Ismat Ullah","Awais","Akhtar Zaman"};
+        preferences = getActivity().getSharedPreferences("HiddenUrl", Context.MODE_PRIVATE);
+        currentURL = preferences.getString("URL", "");
 
-        String[] post = {"50M Dollars", "Water Purifying Scheme", "Shelters program", "Primary education", "Cancer Hospital","Help needed","World Food Campaign"};
-
-        String[] lastMessage = {"Okay", "I will be waiting", "No problem","I appreciate it", "Thank you","Let's see","why not"};
-
-        Integer[] img = {R.drawable.logo, R.drawable.logo, R.drawable.logo, R.drawable.logo, R.drawable.logo, R.drawable.logo,R.drawable.logo};
-
-
-        MyListAdapterOrgMessages adapter=new MyListAdapterOrgMessages(getContext(), names,post,lastMessage, img);
-        list.setAdapter(adapter);
-
+        new dataFetch().execute();
 
         return view;
     }
 
-    public class MyListAdapterOrgMessages extends ArrayAdapter<String> {
 
-        private final Activity context;
-        private final String[] name ;
-        private final String[] lastMessage;
-        private final String[] post ;
-        private final Integer[] img;
+    class dataFetch extends AsyncTask<String,Void,String> {
+        SharedPreferences preferences = getActivity().getSharedPreferences("Login", Context.MODE_PRIVATE);
+        String userId = preferences.getString("UserId","");
+        String JSON_STRING;
+        String requestUrl = currentURL+"DonateIt/getChatOrg.php?id="+userId;
 
-        public MyListAdapterOrgMessages(Context context, String[] name,String[] post, String[] lastMessage, Integer[] img) {
-            super(context, R.layout.full_frag_messages, name);
-            // TODO Auto-generated constructor stub
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                URL url = new URL(requestUrl);
+                HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+                httpURLConnection.setRequestMethod("GET");
+                httpURLConnection.connect();
+                int c = httpURLConnection.getResponseCode();
+                InputStream inputStream = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder stringBuilder = new StringBuilder();
 
-            this.context= (Activity) context;
-            this.name=name;
-            this.lastMessage=lastMessage;
-            this.post = post;
-            this.img = img;
+                while ((JSON_STRING = bufferedReader.readLine())!=null)
+                {
+                    stringBuilder.append(JSON_STRING).append("\n");
+                }
+
+                bufferedReader.close();
+                inputStream.close();
+                httpURLConnection.disconnect();
+
+                return stringBuilder.toString();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
 
         }
 
-        public View getView(int position, View view, ViewGroup parent) {
-            LayoutInflater inflater=context.getLayoutInflater();
-            View rowView=inflater.inflate(R.layout.full_frag_messages, null,true);
 
-            TextView nameT = (TextView) rowView.findViewById(R.id.name);
-            TextView messageT = (TextView) rowView.findViewById(R.id.last_message);
-            //TextView postT = (TextView) rowView.findViewById(R.id.post);
-            ImageView imaget = (ImageView) rowView.findViewById(R.id.image);
 
-            nameT.setText(name[position]);
-            messageT.setText(lastMessage[position]);
-            //postT.setText(post[position]);
-            imaget.setImageResource(img[position]);
+        @Override
+        protected void onPostExecute(String result) {
+            JSONObject jsonObject;
+            JSONArray jsonArray;
+            try {
+                jsonObject = new JSONObject(result);
+                String success = jsonObject.getString("success");
+                dataArrayList.clear();
 
-            return rowView;
+                if (success.equalsIgnoreCase("true")) {
+                    jsonArray = jsonObject.getJSONArray("results");
+                    for (int i = 0; i<jsonArray.length(); i++) {
+                        jsonObject = jsonArray.getJSONObject(i);
+                        String msgId = (jsonObject.getString("messageId"));
+                        String postName = (jsonObject.getString("postName"));
+                        String orgName = (jsonObject.getString("orgName"));
+                        String lastMessage = (jsonObject.getString("lastMessage"));
 
-        };
+                        FragDonorMessagesData data = new FragDonorMessagesData(msgId,orgName, postName, lastMessage );
+                        dataArrayList.add(data);
+                    }
+                }
+
+                adapter = new MyAdapter(getActivity(), dataArrayList);
+                list.setAdapter(adapter);
+
+                list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        String messageId = ((TextView) view.findViewById(R.id.idMessagesDonorList)).getText().toString();
+
+                        Intent intent = new Intent(getActivity(), Chat.class);
+                        intent.putExtra("MessageId", messageId);
+                        intent.putExtra("MessageFrom", "org");
+                        startActivity(intent);
+                    }
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
+
+            }
+        }
     }
+
+
+    private class MyAdapter extends BaseAdapter {
+
+        ArrayList<FragDonorMessagesData> arrayList = new ArrayList<>();
+        LayoutInflater inflater;
+
+        public MyAdapter(Context context, ArrayList<FragDonorMessagesData> arrayList) {
+            this.arrayList = arrayList;
+            inflater = LayoutInflater.from(context);
+        }
+
+        @Override
+        public int getCount() {
+            return dataArrayList.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return arrayList.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder;
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.full_frag_messages, null);
+                holder = new ViewHolder();
+                holder.tvId = convertView.findViewById(R.id.idMessagesDonorList);
+                holder.tvOrgName = convertView.findViewById(R.id.orgNameMessagesDonorList);
+                holder.tvPost = convertView.findViewById(R.id.postMessagesDonorList);
+                holder.tvLastMessage = convertView.findViewById(R.id.lastMessagesDonorList);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+
+            holder.tvId.setText(arrayList.get(position).getMsgId());
+            holder.tvOrgName.setText(arrayList.get(position).getOrgName());
+            holder.tvPost.setText(arrayList.get(position).getPost());
+            holder.tvLastMessage.setText(arrayList.get(position).getLastMessage());
+
+            return convertView;
+        }
+
+        class ViewHolder {
+            TextView tvId,tvOrgName, tvPost, tvLastMessage;
+        }
+
+
+    }
+
 }

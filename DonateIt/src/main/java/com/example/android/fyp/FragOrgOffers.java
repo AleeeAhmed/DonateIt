@@ -2,6 +2,7 @@ package com.example.android.fyp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,9 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,25 +38,17 @@ import java.util.ArrayList;
 
 public class FragOrgOffers extends Fragment {
     ListView list;
+    View view;
     String JSON_STRING;
-    ArrayList<String> names = new ArrayList<>(), goods = new ArrayList<>();
-    ArrayList<Integer> rating = new ArrayList<>();
-    ArrayAdapter<String> adapter;
+    SharedPreferences preferences;
+    MyAdapter adapter;
+    ArrayList<FragOrgOffersData> dataArrayList = new ArrayList<>();
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view= inflater.inflate(R.layout.frag_org_offers, container, false);
-        list = (ListView)  view.findViewById(R.id.list);
-
-      /*  String[] names = {"Saleem", "Sajid", "Abid", "Mubasher", "Danish"};
-        String[] itemNumber = {"100 Blankets", "1 Blankets", "4 Blankets", "25 Blankets", "10 Blankets"};
-        Integer[] numStars = {5,4,5,5,4};*/
-
-
-        adapter=new MyListAdapterSaved(getContext(), names, goods , rating);
-        list.setAdapter(adapter);
-
+        view = inflater.inflate(R.layout.frag_org_offers, container, false);
+        list = (ListView)  view.findViewById(R.id.lvOrgOffer);
         new datafetch().execute();
         return view;
     }
@@ -60,11 +56,14 @@ public class FragOrgOffers extends Fragment {
     class datafetch extends AsyncTask<String,Void,String> {
 
         String object;
-
+        SharedPreferences preferences = getActivity().getSharedPreferences("Login",Context.MODE_PRIVATE);
+        String userId = preferences.getString("UserId", "");
+        SharedPreferences preferences1 = getActivity().getSharedPreferences("HiddenUrl",Context.MODE_PRIVATE);
+        String currentUrl = preferences1.getString("URL", "");
         JSONObject jsonObject;
         JSONArray jsonArray;
 
-        String requestUrl = "http://10.0.2.2:81/DonateIt/offers.php";
+        String requestUrl = currentUrl+"DonateIt/getOffers.php?userId="+userId;
 
         @Override
         protected String doInBackground(String... params) {
@@ -77,7 +76,7 @@ public class FragOrgOffers extends Fragment {
 
                 while ((JSON_STRING = bufferedReader.readLine())!=null)
                 {
-                    stringBuilder.append(JSON_STRING+"\n");
+                    stringBuilder.append(JSON_STRING).append("\n");
                 }
 
                 bufferedReader.close();
@@ -86,8 +85,6 @@ public class FragOrgOffers extends Fragment {
 
                 object =  stringBuilder.toString().trim();
 
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -103,23 +100,29 @@ public class FragOrgOffers extends Fragment {
 
             try {
                 jsonObject = new JSONObject(result);
-                jsonArray = jsonObject.getJSONArray("server_response");
-                int count = 0;
+                String success = jsonObject.getString("success");
+                dataArrayList.clear();
 
+                if (success.equalsIgnoreCase("true")) {
+                    jsonArray = jsonObject.getJSONArray("results");
+                    for (int i = 0 ; i<jsonArray.length(); i++) {
+                        jsonObject = jsonArray.getJSONObject(0);
+                        String offerID = jsonObject.getString("offer_id");
+                        String reqId = jsonObject.getString("request_id");
+                        String senderId = jsonObject.getString("sender_id");
+                        String offeredQuantity = jsonObject.getString("offered_quantity");
+                        String senderRating = jsonObject.getString("sender_rating");
+                        String userId = jsonObject.getString("user_id");
+                        String postName = jsonObject.getString("title");
 
+                        FragOrgOffersData data = new FragOrgOffersData(offerID, reqId, senderId, userId,senderRating, offeredQuantity, postName);
+                        dataArrayList.add(data);
+                    }
+                    adapter = new MyAdapter(getActivity(), dataArrayList);
+                    list.setAdapter(adapter);
 
-
-                while (count<jsonArray.length())
-                {
-                    JSONObject jo = jsonArray.getJSONObject(count);
-                    names.add(jo.getString("name"));
-                    goods.add(jo.getString("goods"));
-                    rating.add(jo.getInt("rating"));
-
-                    Log.i("debug", "suggestions details are"+""+jo.getString("name" )+""+jo.getString("goods")+""+jo.getString("rating"));
-
-                    adapter.notifyDataSetChanged();
-                    count++;
+                } else {
+                    Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -127,43 +130,80 @@ public class FragOrgOffers extends Fragment {
         }
     }
 
+    class MyAdapter extends BaseAdapter {
+        ArrayList<FragOrgOffersData> arrayList = new ArrayList<>();
+        LayoutInflater inflater;
 
+        MyAdapter(Context context, ArrayList<FragOrgOffersData> arrayList) {
+            this.arrayList = arrayList;
+            inflater = LayoutInflater.from(context);
+        }
 
+        @Override
+        public int getCount() {
+            return arrayList.size();
+        }
 
+        @Override
+        public Object getItem(int position) {
+            return arrayList.get(position);
+        }
 
-    public class MyListAdapterSaved extends ArrayAdapter<String> {
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
 
-        private final Activity context;
-        private ArrayList<String> name;
-        private  ArrayList<String> goods;
-        private  ArrayList<Integer> rating;
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder;
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.frag_full_org_offers, null);
+                holder = new ViewHolder();
+                holder.tvOfferId = convertView.findViewById(R.id.offerId_OrgOffer);
+                holder.tvReqId = convertView.findViewById(R.id.reqId_OrgOffer);
+                holder.tvSenderId = convertView.findViewById(R.id.senderId_OrgOffer);
+                holder.tvOrgID = convertView.findViewById(R.id.orgId_OrgOffer);
+                holder.tvOfferAmount = convertView.findViewById(R.id.amount_OrgOffers);
+                holder.tvPostName = convertView.findViewById(R.id.postName_OrgOffers);
+                holder.rbSender = convertView.findViewById(R.id.ratingBar_OrgOffers);
+                holder.btnAccept = convertView.findViewById(R.id.accept_OrgOffer);
+                holder.btnRject = convertView.findViewById(R.id.reject_OrgOffer);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+            holder.btnAccept.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-        public MyListAdapterSaved(Context context, ArrayList<String> name, ArrayList<String> goods, ArrayList<Integer> rating ) {
-            super(context, R.layout.frag_full_org_offers, name);
-            // TODO Auto-generated constructor stub
+                }
+            });
+            holder.btnRject.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-            this.context= (Activity) context;
-            this.name=name;
-            this.goods=goods;
-            this.rating = rating;
+                }
+            });
+
+            holder.tvOfferId.setText(arrayList.get(position).getOfferID());
+            holder.tvPostName.setText(arrayList.get(position).getPostName());
+            holder.tvOfferAmount.setText(arrayList.get(position).getOfferedQuantity());
+            holder.tvReqId.setText(arrayList.get(position).getReqID());
+            holder.tvOrgID.setText(arrayList.get(position).getOrgID());
+            holder.tvSenderId.setText(arrayList.get(position).getSenderID());
+            holder.rbSender.setNumStars(Integer.parseInt(arrayList.get(position).getSenderRating()));
+
+            return convertView;
+        }
+
+        class ViewHolder {
+            TextView tvOfferId, tvPostName, tvOfferAmount, tvReqId, tvSenderId, tvOrgID;
+            RatingBar rbSender;
+            Button btnAccept, btnRject;
 
         }
 
-        public View getView(int position, View view, ViewGroup parent) {
-            LayoutInflater inflater=context.getLayoutInflater();
-            View rowView=inflater.inflate(R.layout.frag_full_org_offers, null,true);
-
-            TextView nameT = (TextView) rowView.findViewById(R.id.name);
-            TextView goodsT = (TextView) rowView.findViewById(R.id.amount_item);
-            RatingBar ratingBarT = (RatingBar) rowView.findViewById(R.id.ratingBar);
-
-            nameT.setText(name.get(position));
-            goodsT.setText(goods.get(position));
-            ratingBarT.setNumStars(rating.get(position));
-
-            return rowView;
-
-        };
     }
 
 }

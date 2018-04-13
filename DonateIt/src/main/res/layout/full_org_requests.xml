@@ -3,65 +3,99 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="10dp">
-    <LinearLayout
+    android:layout_height="wrap_content"
+    android:padding="11dp">
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/idOrgReqList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/targetOrgReqList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/progressOrgReqList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/titleOrgReqList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
-        android:orientation="horizontal"
-        android:id="@+id/upper">
+        android:text="Title"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:textColor="#000"
+        android:layout_toStartOf="@+id/invLabel"
+        />
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="300dp"
-            android:layout_height="25dp"
-            android:textColor="@color/greenAppColor"
-            android:textSize="20dp"/>
+    <TextView
+        android:id="@+id/invLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/invOrgReqList"
+        android:text="Invitations: "
+        />
 
-    </LinearLayout>
+    <TextView
+        android:id="@+id/invOrgReqList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:text="4"
+        android:layout_marginEnd="7dp"
+        />
+
+    <ProgressBar
+        android:id="@+id/pbProgressOrgReqList"
+        android:layout_width="200dp"
+        android:layout_height="11dp"
+        android:layout_gravity="center_horizontal"
+        android:progressDrawable="@drawable/progress_bar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_marginTop="11dp"
+        android:layout_below="@+id/titleOrgReqList"
+        />
 
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/offerLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/offerOrgReqList"
+        android:text="Offers: "
+        android:layout_below="@+id/invLabel"
+        android:layout_alignBaseline="@+id/pbProgressOrgReqList"
+        android:layout_marginTop="11dp"
+        />
+
+    <TextView
+        android:id="@+id/offerOrgReqList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:text="4"
+        android:layout_marginEnd="7dp"
+        android:layout_below="@+id/invOrgReqList"
+        android:layout_marginTop="11dp"
+        />
+
+    <TextView
+        android:id="@+id/descOrgReqList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
-        android:layout_below="@+id/upper"
-        android:orientation="horizontal"
-        android:padding="10dp">
-
-        <TextView
-            android:id="@+id/progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:layout_marginTop="3dp"
-            android:layout_weight="1"/>
-        <TextView
-            android:id="@+id/targetAmount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:layout_marginTop="3dp"
-            android:layout_weight="1"/>
-
-        <TextView
-            android:id="@+id/invitations_sent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:layout_marginTop="3dp"
-            android:layout_weight="1"/>
-
-        <TextView
-            android:id="@+id/offers"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:layout_marginTop="3dp"
-            android:layout_weight="1"/>
-
-    </LinearLayout>
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="7dp"
+        android:layout_below="@+id/pbProgressOrgReqList"
+        android:layout_marginTop="11dp"
+        android:maxLines="1"
+        />
 
 
 </RelativeLayout>

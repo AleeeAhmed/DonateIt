@@ -4,9 +4,11 @@ package com.example.android.fyp;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -18,10 +20,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,73 +48,44 @@ import java.util.ArrayList;
 
 public class FragOrgRequests extends Fragment {
 
-    ////this is not used anywhere... can be deleted
-
     String JSON_STRING;
-    ArrayList<String> title = new ArrayList<>(), desc = new ArrayList<>();
-    ArrayList<Integer> invitations = new ArrayList<>(), offers = new ArrayList<>();
-    ArrayAdapter<String> adapter;
-
-    FragmentManager fragmentManager;
     ListView list;
-    TextView progress, targetAmount;
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
+    ArrayList<FragOrgRequestsData> dataArrayList = new ArrayList<>();
     View view;
-    Button post;
+    MyAdapter adapter;
+    String currentUrl;
+    FloatingActionButton fab;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.i("debug", "org data class created" );
+
         view = inflater.inflate(R.layout.frag_org_requests, container, false);
-        list = (ListView) view.findViewById(R.id.list);
-        post = (Button) view.findViewById(R.id.btnNewRequest);
-        Log.i("debug", "org data loading started" );
 
+        list = (ListView) view.findViewById(R.id.lvOrgRequests);
+        fab = (FloatingActionButton) view.findViewById(R.id.fabNewRequest);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        /*String[] title = {"50 Blankets are needed", "2 million $ are needed", "Volenteers are needed"};
-        String[] invitations = {"3", "30", "10"};
-        String[] offers = {"10", "15", "17"};
-        int[] progress = {10, 90, 50};*/
-
-        MyListAdapterOrgRequests adapterOrgRequests = new MyListAdapterOrgRequests(getContext(), title, invitations, offers);
-        Log.i("debug", "setadapter called" );
-        list.setAdapter(adapterOrgRequests);
+            }
+        });
+        preferences = getActivity().getSharedPreferences("HiddenUrl", Context.MODE_PRIVATE);
+        currentUrl = preferences.getString("URL", "");
         new datafetch().execute();
-
-
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                Intent intent = new Intent(getContext(), ActivityOrgRequestDetails.class);
-                Log.i("debug", "org title passed is"+""+title.get(position) );
-                Bundle bundle = new Bundle();
-                bundle.putString("title",title.get(position));
-                bundle.putString("desc",desc.get(position));
-                intent.putExtras(bundle);
-                startActivity(intent);
-
-            }
-        });
-        post.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setFragment(new FragOrgPostRequestOverview());
-            }
-        });
         return view;
 
     }
 
     class datafetch extends AsyncTask<String,Void,String> {
-
-
         String object;
-
         JSONObject jsonObject;
         JSONArray jsonArray;
-
-        String requestUrl = "DonateIt/orgrequests.php";
+        SharedPreferences preferences = getActivity().getSharedPreferences("Login", Context.MODE_PRIVATE);
+        String user = preferences.getString("UserId", "");
+        String requestUrl = currentUrl + "DonateIt/orgrequests.php?userId="+user;
 
         @Override
         protected String doInBackground(String... params) {
@@ -122,7 +99,7 @@ public class FragOrgRequests extends Fragment {
 
                 while ((JSON_STRING = bufferedReader.readLine())!=null)
                 {
-                    stringBuilder.append(JSON_STRING+"\n");
+                    stringBuilder.append(JSON_STRING).append("\n");
                 }
 
                 bufferedReader.close();
@@ -132,13 +109,10 @@ public class FragOrgRequests extends Fragment {
                 object =  stringBuilder.toString().trim();
                 Log.i("debug", "org object is"+""+object );
 
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
             return object;
-
         }
 
 
@@ -151,86 +125,130 @@ public class FragOrgRequests extends Fragment {
             try {
                 Log.i("debug", "org post got into try" );
                 jsonObject = new JSONObject(result);
-                jsonArray = jsonObject.getJSONArray("server_response");
-                int count = 0;
+                String success = jsonObject.getString("success");
+                if (success.equalsIgnoreCase("true")) {
+                    jsonArray = jsonObject.getJSONArray("results");
 
-                Log.i("debug", "org post end of try" );
-                while (count<jsonArray.length())
-                {
-                    Log.i("debug", "org post while loop started" );
-                    JSONObject jo = jsonArray.getJSONObject(count);
-                    title.add(jo.getString("title"));
-                    invitations.add(jo.getInt("invitations"));
-                    offers.add(jo.getInt("offers"));
-                    desc.add(jo.getString("description"));
+                    for (int i = 0; i<jsonArray.length(); i++) {
+                        jsonObject = jsonArray.getJSONObject(i);
 
-                    Log.i("debug", "org data" + ""+jo.getString("title")+""+jo.getString("invitations")+""+jo.getString("offers"));
+                        String id = (jsonObject.getString("id"));
+                        String title = (jsonObject.getString("title"));
+                        String invitations = String.valueOf((jsonObject.getInt("invitations")));
+                        String offers= String.valueOf((jsonObject.getInt("offers")));
+                        String desc=(jsonObject.getString("description"));
+                        String progress=(jsonObject.getString("progress"));
+                        String target=(jsonObject.getString("target"));
 
-                    //adapter.notifyDataSetChanged();
-                    count++;
+                        FragOrgRequestsData data = new FragOrgRequestsData(id,title, invitations, offers, desc,progress,target);
+                        dataArrayList.add(data);
+                    }
+
+                    adapter = new MyAdapter(getActivity(), dataArrayList);
+                    list.setAdapter(adapter);
+
+                } else {
+                    Toast.makeText(getActivity(), "No requests found..", Toast.LENGTH_SHORT).show();
                 }
-
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-
         }
-
     }
 
 
+    private class MyAdapter extends BaseAdapter {
 
-    public class MyListAdapterOrgRequests extends ArrayAdapter<String> {
+        ArrayList<FragOrgRequestsData> arrayList = new ArrayList<>();
+        LayoutInflater inflater;
 
-        private final Activity context;
-        private ArrayList<String> title;
-        private  ArrayList<Integer> invitations;
-        private  ArrayList<Integer> offers;
-
-        public MyListAdapterOrgRequests(Context context, ArrayList<String> title, ArrayList<Integer> invitations,
-                                        ArrayList<Integer> offers )
-        {
-            super(context, R.layout.full_org_requests, title);
-            // TODO Auto-generated constructor stub
-
-            this.context= (Activity) context;
-            this.title=title;
-            this.invitations=invitations;
-            this.offers= offers;
+        public MyAdapter(Context context, ArrayList<FragOrgRequestsData> arrayList) {
+            this.arrayList = arrayList;
+            inflater = LayoutInflater.from(context);
         }
 
-        public View getView(int position,View view,ViewGroup parent) {
-            LayoutInflater inflater=context.getLayoutInflater();
-            View rowView=inflater.inflate(R.layout.full_org_requests, null,true);
-
-            ;
-
-            TextView titleT = (TextView) rowView.findViewById(R.id.title);
-            TextView invitationT = (TextView) rowView.findViewById(R.id.invitations_sent);
-            TextView offerT = (TextView) rowView.findViewById(R.id.offers);
-            progress = (TextView) rowView.findViewById(R.id.progress);
-            targetAmount = (TextView) rowView.findViewById(R.id.targetAmount);
-
-
-            titleT.setText(title.get(position));
-            invitationT.setText(invitations.get(position) + " Invitation sent");
-            offerT.setText(offers.get(position) + " Offers");
-
-            return rowView;
-
-        };
-    }
-    public void setFragment(Fragment fragment ){
-        if(fragment!=null){
-
-            fragmentManager=getActivity().getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.content_main, fragment);
-            fragmentTransaction.commit();
+        @Override
+        public int getCount() {
+            return dataArrayList.size();
         }
-        //DrawerLayout drawer = (DrawerLayout) view.findViewById(R.id.drawer_layout);
-        //drawer.closeDrawer(GravityCompat.START);
+
+        @Override
+        public Object getItem(int position) {
+            return arrayList.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            final ViewHolder holder;
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.full_org_requests, null);
+                holder = new ViewHolder();
+                holder.tvID = convertView.findViewById(R.id.idOrgReqList);
+                holder.tvTitle = convertView.findViewById(R.id.titleOrgReqList);
+                holder.tvDesc = convertView.findViewById(R.id.descOrgReqList);
+                holder.tvTarget = convertView.findViewById(R.id.targetOrgReqList);
+                holder.tvProgress = convertView.findViewById(R.id.progressOrgReqList);
+                holder.tvInvitations = convertView.findViewById(R.id.invOrgReqList);
+                holder.tvOffers = convertView.findViewById(R.id.offerOrgReqList);
+                holder.progressBar = convertView.findViewById(R.id.pbProgressOrgReqList);
+                //holder.imageView = convertView.findViewById(R.id.savedDonorRequestsList);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+
+            preferences = getActivity().getSharedPreferences("Login", Context.MODE_PRIVATE);
+            String user = preferences.getString("Username", "");
+            preferences = getActivity().getSharedPreferences(user+"_SavedRequests", Context.MODE_PRIVATE);
+
+/*            holder.imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    editor = preferences.edit();
+                    if (preferences.getBoolean(arrayList.get(position).getID(), false)) {
+                        editor.remove(arrayList.get(position).getID());
+                        Toast.makeText(getActivity(), arrayList.get(position).getTitle()+" removed from saved requests", Toast.LENGTH_SHORT).show();
+                    } else {
+                        editor.putBoolean(arrayList.get(position).getID(), true);
+                        Toast.makeText(getActivity(), arrayList.get(position).getTitle()+" added to saved requests", Toast.LENGTH_SHORT).show();
+                    }
+                    editor.apply();
+                    new FragRequests.dataFetch().execute();
+                }
+            });*/
+            holder.progressBar.setMax(Integer.parseInt(arrayList.get(position).getTarget()));
+            holder.progressBar.setProgress(Integer.parseInt(arrayList.get(position).getProgress()));
+            holder.tvID.setText(arrayList.get(position).getId());
+            holder.tvTitle.setText(arrayList.get(position).getTitle());
+            holder.tvDesc.setText(arrayList.get(position).getDescription());
+            holder.tvProgress.setText(arrayList.get(position).getProgress());
+            holder.tvTarget.setText(arrayList.get(position).getTarget());
+            holder.tvInvitations.setText(arrayList.get(position).getInvitations());
+            holder.tvOffers.setText(arrayList.get(position).getOffers());
+
+/*
+            if (preferences.getBoolean(arrayList.get(position).getID(),false)) {
+                holder.imageView.setImageDrawable(getResources().getDrawable(R.drawable.filledheart));
+            } else {
+                holder.imageView.setImageDrawable(getResources().getDrawable(R.drawable.emptyheart));
+            }
+*/
+
+            return convertView;
+        }
+
+        class ViewHolder {
+            TextView tvID,tvTitle, tvDesc, tvProgress, tvTarget, tvInvitations, tvOffers;
+            ProgressBar progressBar;
+            //ImageView imageView;
+        }
+
+
     }
+
 }

@@ -36,4 +36,5 @@
     <string name="tab_text_3">Tab 3</string>
     <string name="title_activity_org_navigation_drawer">OrgNavigationDrawer</string>
     <string name="title_activity_donor_dashboard">Dashboard</string>
+    <string name="title_activity_organization_dashboard">OrganizationDashboard</string>
 </resources>

@@ -34,7 +34,12 @@
             android:label="@string/title_activity_donor_dashboard"
             android:theme="@style/AppTheme" />
         <activity android:name=".FragRequestsDetails" />
-        <activity android:name=".Chat"></activity>
+        <activity android:name=".Chat" />
+        <activity
+            android:name=".OrganizationDashboard"
+            android:label="@string/title_activity_organization_dashboard"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".UserDetails"></activity>
     </application>
 
 </manifest>

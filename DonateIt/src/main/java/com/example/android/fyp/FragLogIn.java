@@ -203,20 +203,30 @@ public class FragLogIn extends Fragment {
 
         @Override
         protected void onPostExecute(String result) {
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                String success = jsonObject.getString("success");
 
-            Log.i("debug", "result is" + " "+result +""+"it should be Success");
+                if(success.equalsIgnoreCase("true"))
+                {
+                    preferences = getActivity().getSharedPreferences("Login", Context.MODE_PRIVATE);
+                    editor = preferences.edit();
+                    editor.clear();
+                    editor.putString("Username", jsonObject.getString("email"));
+                    editor.putString("UserId", jsonObject.getString("id"));
+                    editor.apply();
+                    Toast.makeText(getActivity(),"Logged in Successfully..",Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), OrganizationDashboard.class);
+                    startActivity(intent);
+                    getActivity().finish();
+                }else
+                {
+                    Toast.makeText(getActivity(),"Email or Password is wrong",Toast.LENGTH_SHORT).show();
+                    passwordE.setText("");
+                    emailE.setText("");
+                }
+            } catch (Exception ignored) {
 
-            if(result.equalsIgnoreCase("Success"))
-            {
-                Toast.makeText(getContext(),"Logged in Successfully",Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getActivity(), OrgNavigationDrawer.class);
-                startActivity(intent);
-            }else if(result.contains("Failed"))
-            {
-                Toast.makeText(getActivity(),result,Toast.LENGTH_SHORT).show();
-                Toast.makeText(getActivity(),"Email or Password is wrong",Toast.LENGTH_SHORT).show();
-                passwordE.setText("");
-                emailE.setText("");
             }
         }
     }

@@ -132,6 +132,7 @@ public class FragDonorMessages extends Fragment {
 
                         Intent intent = new Intent(getActivity(), Chat.class);
                         intent.putExtra("MessageId", messageId);
+                        intent.putExtra("MessageFrom", "donor");
                         startActivity(intent);
                     }
                 });
@@ -170,23 +171,23 @@ public class FragDonorMessages extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder;
-            if (convertView == null) {
-                convertView = inflater.inflate(R.layout.full_frag_messages, null);
-                holder = new ViewHolder();
-                holder.tvId = convertView.findViewById(R.id.idMessagesDonorList);
-                holder.tvOrgName = convertView.findViewById(R.id.orgNameMessagesDonorList);
-                holder.tvPost = convertView.findViewById(R.id.postMessagesDonorList);
-                holder.tvLastMessage = convertView.findViewById(R.id.lastMessagesDonorList);
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
+                ViewHolder holder;
+                if (convertView == null) {
+                    convertView = inflater.inflate(R.layout.full_frag_messages, null);
+                    holder = new ViewHolder();
+                    holder.tvId = convertView.findViewById(R.id.idMessagesDonorList);
+                    holder.tvOrgName = convertView.findViewById(R.id.orgNameMessagesDonorList);
+                    holder.tvPost = convertView.findViewById(R.id.postMessagesDonorList);
+                    holder.tvLastMessage = convertView.findViewById(R.id.lastMessagesDonorList);
+                    convertView.setTag(holder);
+                } else {
+                    holder = (ViewHolder) convertView.getTag();
+                }
 
-            holder.tvId.setText(arrayList.get(position).getMsgId());
-            holder.tvOrgName.setText(arrayList.get(position).getOrgName());
-            holder.tvPost.setText(arrayList.get(position).getPost());
-            holder.tvLastMessage.setText(arrayList.get(position).getLastMessage());
+                holder.tvId.setText(arrayList.get(position).getMsgId());
+                holder.tvOrgName.setText(arrayList.get(position).getOrgName());
+                holder.tvPost.setText(arrayList.get(position).getPost());
+                holder.tvLastMessage.setText(arrayList.get(position).getLastMessage());
 
             return convertView;
         }

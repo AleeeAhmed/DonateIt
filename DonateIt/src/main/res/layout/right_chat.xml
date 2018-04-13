@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imgChat"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/user4"
+        android:layout_marginEnd="5dp"
+        android:layout_gravity="bottom|end"
+
+        />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="3dp"
+        android:padding="17dp"
+        android:layout_marginStart="55dp"
+        android:layout_marginEnd="60dp"
+        android:orientation="vertical"
+        android:layout_gravity="end"
+        android:background="@drawable/right_chat_back"
+        >
+
+    <TextView
+        android:id="@+id/tvMessageChat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="My message here"
+        android:textColor="#FFF"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/tvDateChat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2018-10-12"
+        android:textColor="#FFF"
+        android:textStyle="bold"
+        android:layout_marginTop="3dp"
+        />
+
+    </LinearLayout>
+    </FrameLayout>
+</RelativeLayout>

@@ -137,21 +137,10 @@ public class FragRequests extends Fragment {
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
                         String id_ = ((TextView) view.findViewById(R.id.idDonorRequestsList)).getText().toString();
-                        String title = ((TextView) view.findViewById(R.id.titleDonorRequestsList)).getText().toString();
-                        String desc= ((TextView) view.findViewById(R.id.descDonorRequestsList)).getText().toString();
-                        String progress= ((TextView) view.findViewById(R.id.progressDonorRequestsList)).getText().toString();
-                        String target = ((TextView) view.findViewById(R.id.targetAmountDonorRequestsList)).getText().toString();
 
                         Intent intent = new Intent(getActivity(), FragRequestsDetails.class);
                         intent.putExtra("ID", id_);
-                        intent.putExtra("Title", title);
-                        intent.putExtra("Desc", desc);
-                        intent.putExtra("Progress", progress);
-                        intent.putExtra("Target", target);
-
                         startActivity(intent);
                     }
                 });

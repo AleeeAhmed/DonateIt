@@ -5,6 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
     tools:context="com.example.android.fyp.Chat">
 
 
@@ -13,6 +15,40 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:listitem="@layout/left_chat"
+        android:dividerHeight="0dp"
+        android:divider="@null"
+        android:layout_marginBottom="12dp"
+        android:layout_above="@+id/edNewMsg"
         />
 
+    <EditText
+        android:id="@+id/edNewMsg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/edittext_back"
+        android:layout_margin="7dp"
+        android:hint="Enter message here..."
+        android:padding="13dp"
+        android:maxHeight="150dp"
+        android:gravity="start"
+        android:inputType="textMultiLine"
+        android:scrollbars="vertical"
+        android:layout_toStartOf="@+id/btnSendMessage"
+        />
+    <Button
+        android:id="@+id/btnSendMessage"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:text="Send"
+        android:textSize="17sp"
+        android:textColor="#fff"
+        android:textStyle="bold"
+        android:layout_margin="7dp"
+        android:background="@drawable/button_send_back"
+        style="?attr/buttonBarStyle"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+
+        />
 </RelativeLayout>

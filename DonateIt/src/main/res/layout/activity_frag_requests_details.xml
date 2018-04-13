@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:padding="11dp"
+    android:padding="17dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvTitleLabel"
-        android:text="Title"
+        android:text=""
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         android:textSize="17sp"
@@ -45,7 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvDescLabel"
-        android:text="Desc"
+        android:text=""
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         android:textSize="17sp"
@@ -66,7 +66,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvProgresLabel"
-        android:text="Progress"
+        android:text=""
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         android:textSize="17sp"
@@ -87,7 +87,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvTargetLabel"
-        android:text="Target"
+        android:text=""
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         android:textSize="17sp"
@@ -125,6 +125,6 @@
         android:background="@color/colorPrimary"
         android:textColor="@color/white"
         android:textStyle="bold"
-        android:layout_marginTop="17dp  "
+        android:layout_marginTop="17dp"
         />
 </RelativeLayout>

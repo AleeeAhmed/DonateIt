@@ -1,19 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
 
-   <Button
-       android:layout_width="wrap_content"
-       android:layout_height="40dp"
-       android:gravity="right"
-       android:id="@+id/btnNewRequest"
-       android:text="Post new Request"
-       />
+    >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true">
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:id="@+id/fabNewRequest"
+            android:src="@drawable/add"
+            app:fabSize="auto"
+            />
+    </RelativeLayout>
+
     <ListView
-        android:id="@+id/list"
+        android:id="@+id/lvOrgRequests"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        tools:listitem="@layout/full_org_requests"
+        />
+</RelativeLayout>

@@ -1,7 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="11dp"
+    >
+
+    <TextView
+        android:id="@+id/offerId_OrgOffer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:id="@+id/reqId_OrgOffer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:id="@+id/orgId_OrgOffer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:id="@+id/senderId_OrgOffer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,33 +42,36 @@
         android:padding="5dp">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:id="@+id/name"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:layout_weight="3"
-            android:layout_marginStart="15dp"
-            android:textAlignment="textStart"/>
+            android:id="@+id/postName_OrgOffers"
+            android:layout_width="160dp"
+            android:layout_height="30dp"
+            android:text="Post Name"
+            android:textColor="#000"
+            android:gravity="center_vertical"
+            />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:id="@+id/amount_item"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:layout_weight="3"/>
+            android:id="@+id/amount_OrgOffers"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:text="Amount"
+            android:gravity="center"
+            />
         <RatingBar
-            android:id="@+id/ratingBar"
-            android:layout_width="150dp"
-            android:layout_height="28dp"
-            android:max="5"
+            android:id="@+id/ratingBar_OrgOffers"
+            android:layout_width="110dp"
+            android:layout_height="30dp"
             android:numStars="5"
-            android:rating="4"
+            android:max="5"
+            android:rating="5"
             android:scaleX=".5"
             android:scaleY=".5"
             android:layout_gravity="end"
+            android:clickable="false"
+            android:saveEnabled="false"
             style="?android:attr/ratingBarStyleIndicator"
-            android:layout_weight="1"/>
+
+            />
 
     </LinearLayout>
 
@@ -49,25 +83,31 @@
         android:id="@+id/lower"
         android:layout_below="@+id/upper"
         android:padding="5dp"
+        android:gravity="center_horizontal"
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/reject_offer"
-            android:layout_width="wrap_content"
+            android:id="@+id/reject_OrgOffer"
+            android:layout_width="100dp"
             android:layout_height="30dp"
             android:text=" Reject"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="15dp"
-            android:textSize="9dp"
-            android:layout_weight="1"/>
+            android:background="@drawable/button_send_back"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:textSize="12sp"/>
 
         <Button
-            android:id="@+id/accept_offer"
-            android:layout_width="wrap_content"
+            android:id="@+id/accept_OrgOffer"
+            android:layout_width="100dp"
             android:layout_height="30dp"
             android:text="Accept"
-            android:textSize="9dp"
-            android:layout_weight="1"/>
+            android:textSize="12sp"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:background="@drawable/button_send_back"
+            android:layout_marginStart="11dp"/>
 
     </LinearLayout>
 

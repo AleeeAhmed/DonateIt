@@ -1,70 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:padding="7dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/id_InvitationsList"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/upper"
-        android:padding="3dp">
-
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignTop="@+id/ratingBar"
-            android:layout_marginStart="15dp"
-            android:text="TextView"
-            android:textColor="@color/black"
-            android:layout_weight="1"/>
-<!--
-
-        <RatingBar
-            android:id="@+id/ratingBar"
-            style="?android:attr/ratingBarStyleIndicator"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:numStars="5"
-            android:rating="5"
-            android:scaleX=".7"
-            android:scaleY=".7"
-            android:transformPivotX="0dp"
-            android:transformPivotY="0dp"
-            android:layout_weight="1"/>
-
--->
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
+        android:visibility="gone"
+        />
+    <TextView
+        android:id="@+id/orgId_InvitationsList"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@id/upper"
-        android:padding="3dp">
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:id="@+id/progress_InvitationList"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:id="@+id/target_InvitationList"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:id="@+id/postName_InvitationList"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_alignParentStart="true"
+        android:text="PostName"
+        android:textColor="@color/black"
+        android:gravity="center_vertical"
+        android:layout_toStartOf="@+id/btnCancel_InvitationList"
+        />
+    <!--
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                style="?android:attr/ratingBarStyleIndicator"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:numStars="5"
+                android:rating="5"
+                android:scaleX=".7"
+                android:scaleY=".7"
+                android:transformPivotX="0dp"
+                android:transformPivotY="0dp"
+                android:layout_weight="1"/>
+
+    -->
 
 
-        <TextView
-            android:id="@+id/amount_item"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="15dp"
-            android:text="TextView"
-            android:layout_weight="1"/>
+    <ProgressBar
+        android:id="@+id/pbProgress_InvitationList"
+        android:layout_width="180dp"
+        android:layout_height="11dp"
+        android:layout_gravity="center_horizontal"
+        android:progressDrawable="@drawable/progress_bar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_marginTop="7dp"
+        android:layout_below="@+id/postName_InvitationList"
+        />
 
-        <Button
-            android:id="@+id/cancel_invitation_button"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:text="Cancel Invitation"
-            android:textSize="10dp"
-            android:layout_weight="1"/>
 
-    </LinearLayout>
+    <Button
+        android:id="@+id/btnCancel_InvitationList"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:text="Cancel"
+        android:textSize="12sp"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/button_send_back"
+        />
 
+    <TextView
+        android:id="@+id/clickLabel1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click to offer resources to "
+        android:layout_below="@+id/pbProgress_InvitationList"
+        android:layout_marginTop="7dp"
+        />
+
+    <TextView
+        android:id="@+id/orgName_InvitationList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/clickLabel1"
+        android:layout_below="@+id/pbProgress_InvitationList"
+        android:layout_marginTop="7dp"
+        />
 </RelativeLayout>

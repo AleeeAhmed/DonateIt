@@ -111,7 +111,8 @@ public class DonorDashboard extends AppCompatActivity
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.frameLayoutDonorDashboard, new FragDonorMessages()).addToBackStack(null).commit();
         } else if (id == R.id.nav_invitations_donor_dashboard) {
-
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frameLayoutDonorDashboard, new FragOrgInvitationsSent()).addToBackStack(null).commit();
         } else if (id == R.id.nav_donationHistory_donor_dashboard) {
 
         } else if (id == R.id.nav_settings_donor_dashboard) {

@@ -133,8 +133,6 @@ public class Chat extends AppCompatActivity {
 
         }
 
-
-
         @Override
         protected void onPostExecute(String result) {
             JSONObject jsonObject;
@@ -167,11 +165,11 @@ public class Chat extends AppCompatActivity {
 
             }
         }
+
     }
     class dataFetchForNewMessage extends AsyncTask<String,Void,String> {
 
         String JSON_STRING, msgId,sender, date, msg;
-
 
         dataFetchForNewMessage(String messageId, String msgFrom, String currentDate, String message) {
             msgId = messageId;
@@ -213,13 +211,13 @@ public class Chat extends AppCompatActivity {
         }
 
 
-
         @Override
         protected void onPostExecute(String result) {
             JSONObject jsonObject;
             try {
                 jsonObject = new JSONObject(result);
                 String success = jsonObject.getString("success");
+
 
                 if (success.equalsIgnoreCase("true")) {
                     edNewMsg.setText("");
@@ -234,6 +232,7 @@ public class Chat extends AppCompatActivity {
 
             }
         }
+
     }
 
     class MyAdapter extends BaseAdapter {

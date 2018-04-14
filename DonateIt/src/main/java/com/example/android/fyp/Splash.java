@@ -30,8 +30,8 @@ public class Splash extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("HiddenUrl", MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.clear();
-        editor.putString("URL", "http://192.168.1.6:8081/"); //wifi
-        //editor.putString("URL", "http://169.254.154.92:8081/"); //mobile net
+        editor.putString("URL", "http://192.168.1.2:8081/"); //wifi
+        //editor.putString("URL", "http://192.168.43.152:8081/"); //mobile net
         //editor.putString("URL", "http://10.0.2.2:8081/"); //emulator
         editor.apply();
 

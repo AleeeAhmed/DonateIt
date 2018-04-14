@@ -5,7 +5,7 @@ package com.example.android.fyp;
  */
 
 public class FragRequestsData {
-    String ID,Title, Description;
+    String ID,Title, Description,Keyword;
     int Progress, Target;
 
     public FragRequestsData(String ID, String title, String description, int progress, int target) {
@@ -16,10 +16,24 @@ public class FragRequestsData {
         Target = target;
     }
 
+    public FragRequestsData(String ID, String title,String keyword, String description, int progress, int target) {
+        this.ID = ID;
+        Title = title;
+        Keyword = keyword;
+        Description = description;
+        Progress = progress;
+        Target = target;
+    }
+
+
+
+    public String getKeyword() {
+        return Keyword;
+    }
+
     public String getID() {
         return ID;
     }
-
 
     public String getTitle() {
         return Title;

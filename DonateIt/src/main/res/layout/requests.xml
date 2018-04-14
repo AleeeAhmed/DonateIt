@@ -2,13 +2,25 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
     xmlns:tools="http://schemas.android.com/tools">
 
-
+    <EditText
+        android:id="@+id/edSearchDonorRequests"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="11dp"
+        android:hint="Search Here..."
+        android:layout_alignParentTop="true"
+        android:layout_margin="3dp"
+        android:background="@drawable/edittext_back"
+        />
     <ListView
         android:id="@+id/listDonorRequests"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:listitem="@layout/frag_full_requests"
+        android:layout_below="@+id/edSearchDonorRequests"
         />
 </RelativeLayout>

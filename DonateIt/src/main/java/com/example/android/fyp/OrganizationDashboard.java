@@ -1,5 +1,7 @@
 package com.example.android.fyp;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
@@ -86,8 +88,14 @@ public class OrganizationDashboard extends AppCompatActivity
             fragmentTransaction.replace(R.id.frameLayoutOrganizationDashboard,new FragOrgOffers()).addToBackStack(null).commit();
         }else if (id == R.id.nav_org_settings) {
 
-        } else if (id == R.id.nav_org_about) {
-
+        } else if (id == R.id.nav_org_logout) {
+            SharedPreferences preferences = getSharedPreferences("Login", MODE_PRIVATE);
+           SharedPreferences.Editor editor = preferences.edit();
+            editor.clear();
+            editor.apply();
+            Intent intent = new Intent(OrganizationDashboard.this, ActivityValidationReg.class);
+            startActivity(intent);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -176,7 +176,6 @@ public class FragOrgSuggestions extends Fragment {
             try {
                 jsonObject = new JSONObject(result);
                 String success = jsonObject.getString("success");
-                dataArrayList.clear();
 
                 if (success.equalsIgnoreCase("true")) {
                     Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();

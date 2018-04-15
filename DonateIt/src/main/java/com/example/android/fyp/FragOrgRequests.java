@@ -126,6 +126,8 @@ public class FragOrgRequests extends Fragment {
                 Log.i("debug", "org post got into try" );
                 jsonObject = new JSONObject(result);
                 String success = jsonObject.getString("success");
+                dataArrayList.clear();
+
                 if (success.equalsIgnoreCase("true")) {
                     jsonArray = jsonObject.getJSONArray("results");
 

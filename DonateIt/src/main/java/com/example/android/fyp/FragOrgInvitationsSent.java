@@ -133,16 +133,13 @@ public class FragOrgInvitationsSent extends Fragment {
                     list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            String id_ = ((TextView) view.findViewById(R.id.idDonorRequestsList)).getText().toString();
-
+                            String id_ = ((TextView) view.findViewById(R.id.id_InvitationsList)).getText().toString();
                             Intent intent = new Intent(getActivity(), FragRequestsDetails.class);
                             intent.putExtra("ID", id_);
                             startActivity(intent);
                         }
                     });
                 }
-
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }

@@ -75,8 +75,8 @@ public class FragPostRequestDetails extends Fragment {
 
 
         Bundle arguments = getArguments();
-        final String title = arguments.getString("title");
-        final String desc = arguments.getString("desc");
+        final String title = arguments.getString("Title");
+        final String desc = arguments.getString("Desc");
 
 
         cancel.setOnClickListener(new View.OnClickListener() {

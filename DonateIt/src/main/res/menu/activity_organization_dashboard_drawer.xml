@@ -30,9 +30,9 @@
                 android:icon="@drawable/settings"
                 android:title="Settings" />
             <item
-                android:id="@+id/nav_org_about"
-                android:icon="@drawable/about"
-                android:title="About" />
+                android:id="@+id/nav_org_logout"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Logout" />
         </menu>
     </item>
 

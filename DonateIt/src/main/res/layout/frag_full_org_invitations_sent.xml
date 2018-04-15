@@ -78,6 +78,8 @@
         android:layout_height="30dp"
         android:text="Cancel"
         android:textSize="12sp"
+        android:focusableInTouchMode="false"
+        android:focusable="false"
         android:layout_alignParentEnd="true"
         android:background="@drawable/button_send_back"
         />

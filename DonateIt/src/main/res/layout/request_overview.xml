@@ -16,34 +16,34 @@
         android:orientation="vertical">
 
         <EditText
-            android:id="@+id/etTitle"
+            android:id="@+id/etTitleRequestOverview"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:layout_marginRight="2dp"
-            android:background="@drawable/edittext_top_bg"
+            android:background="@drawable/edittext_back"
             android:hint="Title..."
-            android:textColorHint="#bbbbbb" />
+            android:padding="11dp"
+            />
 
         <EditText
-            android:id="@+id/etDescription"
+            android:id="@+id/etDescriptionRequestOverview"
             android:layout_width="match_parent"
             android:layout_height="230dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="2dp"
-            android:background="@drawable/edittext_default_bg"
-
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"
+            android:background="@drawable/edittext_back"
             android:hint="Description..."
             android:inputType="textMultiLine"
-            android:gravity="top"
-            android:textColorHint="#bbbbbb" />
+            android:gravity="start"
+            android:padding="11dp"
+            />
         <Button
-            android:id="@+id/btnNext"
+            android:id="@+id/btnNextRequestOverview"
             style="@style/DefaultButtonText"
             android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:textAllCaps="false"
             android:layout_margin="4dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="15dp"
             android:background="@drawable/button_default_bg"
             android:textColor="@color/greenAppColor"
             android:padding="10dp"

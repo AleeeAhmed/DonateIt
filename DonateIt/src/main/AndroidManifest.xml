@@ -28,6 +28,7 @@
             android:theme="@style/AppTheme" />
         <activity android:name=".ActivityOrgRequestDetails" />
         <activity android:name=".ActivityValidationReg" />
+        <activity android:name=".ActivityRequestOverView" />
         <activity android:name=".ActivityPostRequest" />
         <activity
             android:name=".DonorDashboard"

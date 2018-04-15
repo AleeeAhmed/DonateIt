@@ -1,6 +1,7 @@
 package com.example.android.fyp;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -9,7 +10,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +67,12 @@ public class FragLogIn extends Fragment {
                 String email = emailE.getText().toString().trim();
                 String password = passwordE.getText().toString().trim();
 
-                new databaseProcessForDonor().execute(email, password);
+                if (email.isEmpty() && password.isEmpty()) {
+                    Toast.makeText(getActivity(), "Email and Password Cannot be empty", Toast.LENGTH_SHORT).show();
+                } else {
+
+                    new databaseProcessForDonor().execute(email, password);
+                }
             }
         });
 
@@ -74,9 +82,39 @@ public class FragLogIn extends Fragment {
 
                 String email = emailE.getText().toString();
                 String password = passwordE.getText().toString();
-                new databaseProcessForOrg().execute(email, password);
+                if (email.isEmpty() && password.isEmpty()) {
+                    Toast.makeText(getActivity(), "Email and Password Cannot be empty", Toast.LENGTH_SHORT).show();
+                } else {
+                    new databaseProcessForOrg().execute(email, password);
+                }
             }
         });
+
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        view.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if( keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+                    new AlertDialog.Builder(getActivity(), R.style.Theme_AppCompat_Light_Dialog_Alert)
+                            .setIcon(R.drawable.ic_launcher_foreground)
+                            .setTitle("Closing DonateIt")
+                            .setMessage("Are you sure you want to exit?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    getActivity().finish();
+                                }
+
+                            })
+                            .setNegativeButton("No", null)
+                            .show();
+                    return true;
+                }
+                return false;
+            }
+        });
+
         return view;
     }
 

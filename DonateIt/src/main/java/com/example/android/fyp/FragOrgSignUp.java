@@ -1,6 +1,7 @@
 package com.example.android.fyp;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -9,13 +10,17 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -60,8 +65,8 @@ public class FragOrgSignUp extends Fragment {
                 password = orgPassowrd.getText().toString().trim();
                 confirmPassword = orgConfirmPassword.getText().toString().trim();
 
-                if (!email.isEmpty() || !name.isEmpty() || !registrationNo.isEmpty() ||
-                         !confirmPassword.isEmpty() || !password.isEmpty()) {
+                if (!email.isEmpty() && !name.isEmpty() && !registrationNo.isEmpty() &&
+                         !confirmPassword.isEmpty() && !password.isEmpty()) {
                     if (password.equals(confirmPassword)) {
                         Log.i("Debug", "password matched");
                         new databaseProcessForOrg().execute(name, registrationNo, email, password);
@@ -82,6 +87,24 @@ public class FragOrgSignUp extends Fragment {
                 transaction.replace(R.id.activity_validation, new FragValidationRegistrationPage()).commit();
             }
         });
+
+
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        view.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if( keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+                    Intent intent = new Intent(getActivity(), ActivityValidationReg.class);
+                    startActivity(intent);
+                    getActivity().finish();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+
         return view;
     }
 
@@ -109,8 +132,8 @@ public class FragOrgSignUp extends Fragment {
             String email = params[2];
             String password = params[3];
 
-            String link = currentUrl+"DonateIt/orgSignup.php?email="+email+"&username="+name+
-                    "registrationNo="+registrationNo+"&password="+password;
+            String link = currentUrl+"DonateIt/orgSignup.php?email="+email+"&name="+name+
+                    "&registrationNo="+registrationNo+"&password="+password;
 
             Log.i("Debug", "values are"+""+name+""+registrationNo+""+email+""+password);
 
@@ -143,25 +166,23 @@ public class FragOrgSignUp extends Fragment {
             Log.i("debug", "response returned is" + " "+response);
 
             return response;
-
         }
-
 
         @Override
         protected void onPostExecute(String result) {
-
-            Toast.makeText(getContext(),result,Toast.LENGTH_SHORT).show();
-
-            if(result.equals("Data Insertion Success"))
-            {
-                Toast.makeText(getContext(), "Data insertion Successful", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(getContext(), ActivityValidationReg.class);
-                startActivity(i);
-            }else
-            {
-                Toast.makeText(getContext(), "Data insertion Failed", Toast.LENGTH_SHORT).show();
-            }
-
+            try{
+                JSONObject jsonObject = new JSONObject(result);
+                String success = jsonObject.getString("success");
+                if(success.equalsIgnoreCase("true"))
+                {
+                    Toast.makeText(getContext(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(getContext(), ActivityValidationReg.class);
+                    startActivity(i);
+                }else
+                {
+                    Toast.makeText(getContext(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                }
+            }catch (Exception e){e.printStackTrace();}
         }
     }
 }

@@ -139,6 +139,7 @@ public class FragRequests extends Fragment {
                 if (success.equalsIgnoreCase("true")) {
                     int count = 0;
                     jsonArray = jsonObject.getJSONArray("results");
+
                     while (count<jsonArray.length()) {
                         jsonObject = jsonArray.getJSONObject(count);
                         String id = (jsonObject.getString("id"));

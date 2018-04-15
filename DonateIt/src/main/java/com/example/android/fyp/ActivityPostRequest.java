@@ -56,11 +56,18 @@ public class ActivityPostRequest extends AppCompatActivity {
                 keywords = edKeywords.getText().toString().trim();
                 title = getIntent().getStringExtra("Title");
                 desc = getIntent().getStringExtra("Desc");
-                if (item.isEmpty() || quantity.isEmpty() || keywords.isEmpty()) {
+                if (item.isEmpty() && quantity.isEmpty() && keywords.isEmpty()) {
                     Toast.makeText(ActivityPostRequest.this, "Fill above fields..", Toast.LENGTH_SHORT).show();
                 } else {
                     new databaseProcess().execute();
                 }
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }
@@ -87,7 +94,7 @@ public class ActivityPostRequest extends AppCompatActivity {
 
             String link = currentUrl + "DonateIt/postRequest.php?" +
                     "title=" + title + "&desc=" + desc + "&itemName=" + item + "&itemQuantity=" + quantity +
-                    "&keywords="+keywords+"&endDate="+date+"userId="+userId;
+                    "&keywords="+keywords+"&endDate="+date+"&userId="+userId;
 
             URL url = null;
             try {
@@ -131,8 +138,7 @@ public class ActivityPostRequest extends AppCompatActivity {
                 if(success.equalsIgnoreCase("true"))
                 {
                     Toast.makeText(ActivityPostRequest.this, "Request posted successfully", Toast.LENGTH_SHORT).show();
-                    Intent i = new Intent(ActivityPostRequest.this, OrganizationDashboard.class);
-                    startActivity(i);
+                    finish();
                 }else
                 {
                     Toast.makeText(ActivityPostRequest.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();

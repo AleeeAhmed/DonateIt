@@ -99,46 +99,51 @@ public class FragSavedRequests extends Fragment{
         protected void onPostExecute(String result) {
             try {
                 jsonObject = new JSONObject(result);
-                jsonArray = jsonObject.getJSONArray("server_response");
-                int count = 0;
-                dataArrayList.clear();
+                String success = jsonObject.getString("success");
 
-                preferences = getActivity().getSharedPreferences("Login", Context.MODE_PRIVATE);
-                String user = preferences.getString("Username", "");
-                preferences = getActivity().getSharedPreferences(user+"_SavedRequests", Context.MODE_PRIVATE);
+                if (success.equalsIgnoreCase("true")) {
+                    jsonArray = jsonObject.getJSONArray("results");
+                    int count = 0;
+                    dataArrayList.clear();
+
+                    preferences = getActivity().getSharedPreferences("Login", Context.MODE_PRIVATE);
+                    String user = preferences.getString("Username", "");
+                    preferences = getActivity().getSharedPreferences(user+"_SavedRequests", Context.MODE_PRIVATE);
 
 
-                while (count<jsonArray.length())
-                {
-                    jsonObject = jsonArray.getJSONObject(count);
-                    String id = (jsonObject.getString("id"));
-                    String title = (jsonObject.getString("title"));
-                    String desc= (jsonObject.getString("description"));
-                    int progress= (jsonObject.getInt("progress"));
-                    int target = (jsonObject.getInt("goal"));
+                    while (count<jsonArray.length())
+                    {
+                        jsonObject = jsonArray.getJSONObject(count);
+                        String id = (jsonObject.getString("id"));
+                        String title = (jsonObject.getString("title"));
+                        String desc= (jsonObject.getString("description"));
+                        int progress= (jsonObject.getInt("progress"));
+                        int target = (jsonObject.getInt("goal"));
 
-                    if (preferences.getBoolean(id, false)) {
-                        FragRequestsData data = new FragRequestsData(id, title, desc, progress, target );
-                        dataArrayList.add(data);
-                    }
-
-                    count++;
-                }
-                if (dataArrayList.size() > 0) {
-
-                    adapter = new MyAdapter(getActivity(), dataArrayList);
-                    list.setAdapter(adapter);
-
-                    list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                        if (preferences.getBoolean(id, false)) {
+                            FragRequestsData data = new FragRequestsData(id, title, desc, progress, target );
+                            dataArrayList.add(data);
                         }
-                    });
-                } else {
-                    list.setAdapter(null);
-                    Toast.makeText(getActivity(), "No Saved Requests Found..", Toast.LENGTH_SHORT).show();
+
+                        count++;
+                    }
+                    if (dataArrayList.size() > 0) {
+
+                        adapter = new MyAdapter(getActivity(), dataArrayList);
+                        list.setAdapter(adapter);
+
+                        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                            }
+                        });
+                    } else {
+                        list.setAdapter(null);
+                        Toast.makeText(getActivity(), "No Saved Requests Found..", Toast.LENGTH_SHORT).show();
+                    }
                 }
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }

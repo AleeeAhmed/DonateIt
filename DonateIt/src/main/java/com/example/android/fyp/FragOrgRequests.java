@@ -69,7 +69,8 @@ public class FragOrgRequests extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(getActivity(), ActivityRequestOverView.class);
+                startActivity(intent);
             }
         });
         preferences = getActivity().getSharedPreferences("HiddenUrl", Context.MODE_PRIVATE);

@@ -9,6 +9,18 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin">
 
+    <TextView
+        android:id="@+id/tvTop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="POST REQUEST"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:textStyle="bold"
+        android:textSize="21dp"
+        android:textColor="#000"
+        />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

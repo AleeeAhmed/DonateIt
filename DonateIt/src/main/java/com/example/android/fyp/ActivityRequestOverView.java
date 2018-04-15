@@ -28,7 +28,7 @@ public class ActivityRequestOverView extends AppCompatActivity {
             public void onClick(View v) {
                 title = edTitle.getText().toString().trim();
                 desc = edDesc.getText().toString().trim();
-                if (title.isEmpty() || desc.isEmpty()) {
+                if (title.isEmpty() ||   desc.isEmpty()) {
                     Toast.makeText(ActivityRequestOverView.this, "Fill above fields..", Toast.LENGTH_SHORT).show();
                 } else {
                     Intent intent = new Intent(ActivityRequestOverView.this, ActivityPostRequest.class);

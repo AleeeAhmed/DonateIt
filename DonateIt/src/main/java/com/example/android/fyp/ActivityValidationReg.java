@@ -29,8 +29,6 @@ public class ActivityValidationReg extends AppCompatActivity {
         TabLayout tabs = (TabLayout) findViewById(R.id.tabs_Validation);
         tabs.setupWithViewPager(viewPager);
 
-
-
     }
     private class Adapter extends FragmentPagerAdapter {
 

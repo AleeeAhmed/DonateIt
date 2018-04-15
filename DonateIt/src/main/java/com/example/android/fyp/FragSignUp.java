@@ -2,6 +2,7 @@ package com.example.android.fyp;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -10,7 +11,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,16 +58,16 @@ public class FragSignUp extends Fragment {
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                email = emailE.getText().toString();
-                userName = userNameE.getText().toString();
-                mobileNo =  mobileNoE.getText().toString();
-                country = countryE.getText().toString();
-                city = cityE.getText().toString();
-                confirmPassword = cPasswordE.getText().toString();
-                password = passwordE.getText().toString();
+                email = emailE.getText().toString().trim();
+                userName = userNameE.getText().toString().trim();
+                mobileNo =  mobileNoE.getText().toString().trim();
+                country = countryE.getText().toString().trim();
+                city = cityE.getText().toString().trim();
+                confirmPassword = cPasswordE.getText().toString().trim();
+                password = passwordE.getText().toString().trim();
 
-                if (!email.isEmpty() || !userName.isEmpty() || !mobileNo.isEmpty() ||
-                        !country.isEmpty() || !city.isEmpty() || !confirmPassword.isEmpty() || !password.isEmpty()) {
+                if (!email.isEmpty() && !userName.isEmpty() && !mobileNo.isEmpty() &&
+                        !country.isEmpty() && !city.isEmpty() && !confirmPassword.isEmpty() && !password.isEmpty()) {
                     if (password.equals(confirmPassword)) {
                         new databaseProcessForDonor().execute(email, userName, mobileNo, country, city, password);
                     } else {
@@ -73,7 +76,7 @@ public class FragSignUp extends Fragment {
                 } else {
                     Toast.makeText(getActivity(), "Form is incomplete.. All Fields are mandatory..", Toast.LENGTH_SHORT).show();
                 }
-                    }
+            }
         });
 
         signUpOrg.setOnClickListener(new View.OnClickListener() {
@@ -83,7 +86,34 @@ public class FragSignUp extends Fragment {
                 fragmentTransaction.replace(R.id.activity_validation, new FragOrgSignUp()).addToBackStack(null).commit();
             }
         });
-    return view;
+
+
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        view.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if( keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+                    new AlertDialog.Builder(getActivity(), R.style.Theme_AppCompat_Light_Dialog_Alert)
+                            .setIcon(R.drawable.ic_launcher_foreground)
+                            .setTitle("Closing DonateIt")
+                            .setMessage("Are you sure you want to exit?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    getActivity().finish();
+                                }
+
+                            })
+                            .setNegativeButton("No", null)
+                            .show();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        return view;
     }
 
     private void intializations() {

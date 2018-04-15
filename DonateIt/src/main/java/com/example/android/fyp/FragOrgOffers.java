@@ -130,6 +130,133 @@ public class FragOrgOffers extends Fragment {
         }
     }
 
+    class dataAccept extends AsyncTask<String,Void,String> {
+
+        String object,offrId, reqId,postNam,amount;
+        SharedPreferences preferences1 = getActivity().getSharedPreferences("HiddenUrl",Context.MODE_PRIVATE);
+        String currentUrl = preferences1.getString("URL", "");
+        JSONObject jsonObject;
+        JSONArray jsonArray;
+
+        public dataAccept(String ofrId, String reqId, String post, String amount) {
+            offrId = ofrId;
+            this.reqId = reqId;
+            postNam = post;
+            this.amount = amount;
+        }
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                String requestUrl = currentUrl+"DonateIt/acceptOffer.php?offerId="+offrId+"&reqId="+reqId+"&postName="+postNam+"&amount="+amount;
+                URL url = new URL(requestUrl);
+                HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+                InputStream inputStream = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ((JSON_STRING = bufferedReader.readLine())!=null)
+                {
+                    stringBuilder.append(JSON_STRING).append("\n");
+                }
+
+                bufferedReader.close();
+                inputStream.close();
+                httpURLConnection.disconnect();
+
+                object =  stringBuilder.toString().trim();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return object;
+
+        }
+
+
+
+        @Override
+        protected void onPostExecute(String result) {
+
+
+            try {
+                jsonObject = new JSONObject(result);
+                String success = jsonObject.getString("success");
+                dataArrayList.clear();
+
+                if (success.equalsIgnoreCase("true")) {
+                    Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                    new datafetch().execute();
+                } else {
+                    Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    class dataReject extends AsyncTask<String,Void,String> {
+
+        String object,offrId;
+        SharedPreferences preferences1 = getActivity().getSharedPreferences("HiddenUrl",Context.MODE_PRIVATE);
+        String currentUrl = preferences1.getString("URL", "");
+        JSONObject jsonObject;
+        JSONArray jsonArray;
+
+        public dataReject(String ofrId) {
+            offrId = ofrId;
+        }
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                String requestUrl = currentUrl+"DonateIt/rejectOffer.php?offerId="+offrId;
+                URL url = new URL(requestUrl);
+                HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+                InputStream inputStream = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ((JSON_STRING = bufferedReader.readLine())!=null)
+                {
+                    stringBuilder.append(JSON_STRING).append("\n");
+                }
+
+                bufferedReader.close();
+                inputStream.close();
+                httpURLConnection.disconnect();
+
+                object =  stringBuilder.toString().trim();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return object;
+
+        }
+
+
+
+        @Override
+        protected void onPostExecute(String result) {
+
+
+            try {
+                jsonObject = new JSONObject(result);
+                String success = jsonObject.getString("success");
+                dataArrayList.clear();
+
+                if (success.equalsIgnoreCase("true")) {
+                    Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                    new datafetch().execute();
+                } else {
+                    Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     class MyAdapter extends BaseAdapter {
         ArrayList<FragOrgOffersData> arrayList = new ArrayList<>();
         LayoutInflater inflater;
@@ -155,7 +282,7 @@ public class FragOrgOffers extends Fragment {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             ViewHolder holder;
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.frag_full_org_offers, null);
@@ -176,13 +303,18 @@ public class FragOrgOffers extends Fragment {
             holder.btnAccept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    String ofrId = arrayList.get(position).getOfferID();
+                    String post = arrayList.get(position).getPostName();
+                    String reqId = arrayList.get(position).getReqID();
+                    String amount = arrayList.get(position).getOfferedQuantity();
 
+                    new dataAccept(ofrId,reqId,post,amount).execute();
                 }
             });
             holder.btnRject.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    new dataReject(arrayList.get(position).getOfferID()).execute();
                 }
             });
 

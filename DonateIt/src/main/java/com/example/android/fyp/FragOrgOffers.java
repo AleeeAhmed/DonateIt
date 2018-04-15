@@ -132,22 +132,25 @@ public class FragOrgOffers extends Fragment {
 
     class dataAccept extends AsyncTask<String,Void,String> {
 
-        String object,offrId, reqId,postNam,amount;
+        String object,offrId, reqId,postNam,amount,sender;
         SharedPreferences preferences1 = getActivity().getSharedPreferences("HiddenUrl",Context.MODE_PRIVATE);
         String currentUrl = preferences1.getString("URL", "");
         JSONObject jsonObject;
         JSONArray jsonArray;
 
-        public dataAccept(String ofrId, String reqId, String post, String amount) {
+        public dataAccept(String ofrId, String reqId, String post, String amount, String sender) {
             offrId = ofrId;
             this.reqId = reqId;
             postNam = post;
             this.amount = amount;
+            this.sender = sender;
         }
         @Override
         protected String doInBackground(String... params) {
             try {
-                String requestUrl = currentUrl+"DonateIt/acceptOffer.php?offerId="+offrId+"&reqId="+reqId+"&postName="+postNam+"&amount="+amount;
+                String requestUrl = currentUrl+"DonateIt/acceptOffer.php?offerId="
+                        +offrId+"&reqId="+reqId+"&postName="
+                        +postNam+"&amount="+amount+"&userId="+sender;
                 URL url = new URL(requestUrl);
                 HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
                 InputStream inputStream = httpURLConnection.getInputStream();
@@ -307,8 +310,9 @@ public class FragOrgOffers extends Fragment {
                     String post = arrayList.get(position).getPostName();
                     String reqId = arrayList.get(position).getReqID();
                     String amount = arrayList.get(position).getOfferedQuantity();
+                    String sender = arrayList.get(position).getSenderID();
 
-                    new dataAccept(ofrId,reqId,post,amount).execute();
+                    new dataAccept(ofrId,reqId,post,amount,sender).execute();
                 }
             });
             holder.btnRject.setOnClickListener(new View.OnClickListener() {

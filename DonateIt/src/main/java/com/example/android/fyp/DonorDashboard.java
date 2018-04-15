@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class DonorDashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -114,9 +115,10 @@ public class DonorDashboard extends AppCompatActivity
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.frameLayoutDonorDashboard, new FragOrgInvitationsSent()).addToBackStack(null).commit();
         } else if (id == R.id.nav_donationHistory_donor_dashboard) {
-
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frameLayoutDonorDashboard, new FragRequests()).addToBackStack(null).commit();
         } else if (id == R.id.nav_settings_donor_dashboard) {
-
+            Toast.makeText(this, "Nothing here..", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_logout_donor_dashboard) {
             preferences = getSharedPreferences("Login", MODE_PRIVATE);
             editor = preferences.edit();

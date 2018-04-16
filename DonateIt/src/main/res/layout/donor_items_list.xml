@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:padding="11dp"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/idDonorItems"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:id="@+id/tvNameDonorItems"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Item Name"
+        android:textColor="#000"
+        />
+
+    <TextView
+        android:id="@+id/tvAmountDonorItems"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Item Amount"
+        android:layout_marginTop="3dp"
+        />
+
+</LinearLayout>

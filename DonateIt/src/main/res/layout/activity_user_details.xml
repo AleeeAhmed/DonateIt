@@ -11,10 +11,11 @@
     >
 
     <LinearLayout
+        android:id="@+id/LLUserDetailsTop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="17dp"
+        android:padding="11dp"
         android:layout_margin="11dp"
         >
         <TextView
@@ -73,7 +74,7 @@
             android:background="@color/colorPrimary"
             android:textColor="#FFF"
             android:textStyle="bold"
-            android:layout_marginTop="17dp"
+            android:layout_marginTop="7dp"
             />
 
     </LinearLayout>
@@ -100,6 +101,7 @@
         android:layout_marginBottom="7dp"
         android:background="@drawable/user_details_back"
         android:visibility="gone"
+
         >
 
 
@@ -157,4 +159,28 @@
             />
     </LinearLayout>
     </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tvUserItemsLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Your Items"
+        android:layout_below="@+id/LLUserDetailsTop"
+        android:padding="11dp"
+        android:background="@color/greenAppColor"
+        android:textColor="#fff"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        />
+
+    <ListView
+        android:id="@+id/lvUserDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvUserItemsLabel"
+        tools:listitem="@layout/donor_items_list"
+        />
+
+
 </RelativeLayout>

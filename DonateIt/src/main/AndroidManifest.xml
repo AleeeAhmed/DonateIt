@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.android.fyp">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -40,7 +41,9 @@
             android:name=".OrganizationDashboard"
             android:label="@string/title_activity_organization_dashboard"
             android:theme="@style/AppTheme" />
-        <activity android:name=".UserDetails"></activity>
+        <activity android:name=".UserDetails" />
+        <activity android:name=".VerifyDonor" />
+        <activity android:name=".VerifyOrg" />
     </application>
 
 </manifest>

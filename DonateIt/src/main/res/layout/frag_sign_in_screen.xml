@@ -51,7 +51,7 @@
             android:id="@+id/btnSingIn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sign In"
+            android:text="Sign In as Donor"
             style="@style/DefaultButtonText"
             android:background="@drawable/button_default_bg"
             android:textAllCaps="false"
@@ -92,6 +92,49 @@
             style="@style/DefaultButtonText"
             android:background="@drawable/button_default_bg"
             />
+
+        <TextView
+            android:id="@+id/tvVerifyDonor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Verify Donor"
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:textStyle="bold"
+            />
+        <TextView
+            android:id="@+id/tvVerifyOrg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Verify Organization"
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:textStyle="bold"
+            android:layout_marginTop="7dp"
+            />
+
+        <TextView
+            android:id="@+id/tvForgotPasswordDonor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Forgot Password for Donor?"
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:textStyle="bold"
+            android:layout_marginTop="7dp"
+            />
+        <TextView
+            android:id="@+id/tvForgotPasswordOrg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Forgot Password for Organization?"
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:textStyle="bold"
+            android:layout_marginTop="7dp"
+            />
+
     </LinearLayout>
+
 
 </RelativeLayout>

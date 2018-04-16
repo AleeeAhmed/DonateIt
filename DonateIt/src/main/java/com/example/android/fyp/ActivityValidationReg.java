@@ -3,6 +3,7 @@ package com.example.android.fyp;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,6 +11,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 /**
  * Created by HP on 1/27/2018.
@@ -17,11 +19,14 @@ import android.support.v7.app.AppCompatActivity;
 
 public class ActivityValidationReg extends AppCompatActivity {
 
+    AppBarLayout appBarLayout;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_validation_registration);
 
+        appBarLayout = findViewById(R.id.appBar);
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager_Validation);
         Adapter adapter = new Adapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
@@ -65,6 +70,7 @@ public class ActivityValidationReg extends AppCompatActivity {
             return null;
         }
     }
+
 
     @Override
     public void onBackPressed() {

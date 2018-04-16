@@ -128,6 +128,9 @@ public class DonorDashboard extends AppCompatActivity
         } else if (id == R.id.nav_donationHistory_donor_dashboard) {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.frameLayoutDonorDashboard, new FragDonationHistory()).addToBackStack(null).commit();
+        }else if (id == R.id.nav_offers_donor_dashboard) {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frameLayoutDonorDashboard, new FragDonorOffers()).addToBackStack(null).commit();
         } else if (id == R.id.nav_settings_donor_dashboard) {
             Toast.makeText(this, "Nothing here..", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_logout_donor_dashboard) {

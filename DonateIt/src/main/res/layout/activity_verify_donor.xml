@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:padding="17dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.android.fyp.VerifyDonor">
+
+    <TextView
+        android:id="@+id/tvEmailLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Email: "
+        android:textColor="#000"
+        android:layout_marginStart="7dp"
+        />
+
+    <EditText
+        android:id="@+id/edEmail_verify"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Email.."
+        android:layout_marginTop="3dp"
+        android:layout_below="@+id/tvEmailLabel"
+        android:textColor="#000"
+        android:padding="11dp"
+        android:background="@drawable/edittext_back"
+        android:inputType="textEmailAddress"
+        />
+
+    <TextView
+        android:id="@+id/tvVerificationLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Verification Number: "
+        android:textColor="#000"
+        android:layout_marginStart="7dp"
+        android:layout_below="@+id/edEmail_verify"
+        android:layout_marginTop="7dp"
+        />
+
+    <EditText
+        android:id="@+id/edVerficationNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Verification Number.."
+        android:layout_marginTop="3dp"
+        android:layout_below="@+id/tvVerificationLabel"
+        android:textColor="#000"
+        android:padding="11dp"
+        android:background="@drawable/edittext_back"
+        />
+
+    <Button
+        android:id="@+id/btnVerify"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Verify"
+        android:layout_below="@+id/edVerficationNumber"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="11dp"
+        android:textAllCaps="false"
+        android:background="@drawable/button_send_back"
+        />
+
+</RelativeLayout>
+

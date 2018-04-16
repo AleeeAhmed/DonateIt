@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.creativityapps.gmailbackgroundlibrary.BackgroundMail;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -44,6 +47,8 @@ public class FragSignUp extends Fragment {
     EditText emailE, userNameE, mobileNoE,countryE, cityE, cPasswordE ,passwordE;
     String email, userName, mobileNo, country, city, password, confirmPassword, currentUrl;
     SharedPreferences preferences;
+    int randomPIN;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState){
@@ -68,11 +73,15 @@ public class FragSignUp extends Fragment {
 
                 if (!email.isEmpty() && !userName.isEmpty() && !mobileNo.isEmpty() &&
                         !country.isEmpty() && !city.isEmpty() && !confirmPassword.isEmpty() && !password.isEmpty()) {
-                    if (password.equals(confirmPassword)) {
-                        new databaseProcessForDonor().execute(email, userName, mobileNo, country, city, password);
-                    } else {
-                        Toast.makeText(getContext(), "Passwords does not matches", Toast.LENGTH_SHORT).show();
-                    }
+                    if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                        if (password.equals(confirmPassword)) {
+                            new databaseProcessForDonor().execute(email, userName, mobileNo, country, city, password);
+                        } else {
+                            Toast.makeText(getContext(), "Passwords does not matches", Toast.LENGTH_SHORT).show();
+                        }
+                    }else {
+                            Toast.makeText(getActivity(), "Email format is not correct", Toast.LENGTH_SHORT).show();
+                        }
                 } else {
                     Toast.makeText(getActivity(), "Form is incomplete.. All Fields are mandatory..", Toast.LENGTH_SHORT).show();
                 }
@@ -129,7 +138,8 @@ public class FragSignUp extends Fragment {
     }
 
     private class databaseProcessForDonor extends AsyncTask<String, Void, String> {
-
+        SharedPreferences preferences = getActivity().getSharedPreferences("HiddenUrl", Context.MODE_PRIVATE);
+        String currentUrl = preferences.getString("URL", "");
         @Override
         protected String doInBackground(String... params) {
             String response = "";
@@ -141,8 +151,10 @@ public class FragSignUp extends Fragment {
             String city = params[4];
             String password = params[5];
 
+            randomPIN = (int)(Math.random()*9000)+1000;
+
             String link = currentUrl+"DonateIt/donorSignup.php?email="+email+"&username="+username+
-                    "&mobileNo="+mobileNo+"&country="+country+"&city="+city+"&password="+password;
+                    "&mobileNo="+mobileNo+"&country="+country+"&city="+city+"&password="+password+"&verificationNum="+randomPIN;
 
             try {
                 Log.i("Debug", "regestration started");
@@ -182,9 +194,31 @@ public class FragSignUp extends Fragment {
             if(result.contains("Successful"))
             {
                 Toast.makeText(getActivity(), "Sign Up Successfully", Toast.LENGTH_SHORT).show();
+
+                BackgroundMail.newBuilder(getActivity())
+                        .withUsername("waqarfyp@gmail.com")
+                        .withPassword("PAKISTAN@123")
+                        .withMailto(email)
+                        .withType(BackgroundMail.TYPE_PLAIN)
+                        .withSubject("Email Verification DonateIt")
+                        .withBody("Please verify your app using  following data..\n\nEnter this number to verify it..\n\n"+randomPIN)
+                        .withOnSuccessCallback(new BackgroundMail.OnSuccessCallback() {
+                            @Override
+                            public void onSuccess() {
+                                Toast.makeText(getActivity(), "Verification code is sent to your email..", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .withOnFailCallback(new BackgroundMail.OnFailCallback() {
+                            @Override
+                            public void onFail() {
+                                Toast.makeText(getActivity(), "Something went wrong.. Couldn't send you verification email now..", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .send();
+
+
                 Intent i = new Intent(getActivity(), ActivityValidationReg.class);
                 startActivity(i);
-                getActivity().finish();
 
             }else
             {

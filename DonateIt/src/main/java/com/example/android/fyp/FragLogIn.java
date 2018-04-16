@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONObject;
@@ -43,6 +44,7 @@ public class FragLogIn extends Fragment {
     Button signIn;
     Button signInFb;
     Button signInOrg;
+    TextView tvDonor, tvOrg, tvForgotPassDonor,tvForgotPassOrg;
     EditText emailE,passwordE;
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
@@ -90,6 +92,40 @@ public class FragLogIn extends Fragment {
             }
         });
 
+        tvForgotPassDonor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.activity_validation, new ForgotPasswordDonor()).addToBackStack(null).commit();
+            }
+        });
+
+        tvForgotPassOrg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.activity_validation, new ForgotPasswordOrg()).addToBackStack(null).commit();
+            }
+        });
+
+        tvOrg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), VerifyOrg.class);
+                startActivity(intent);
+                getActivity().finish();
+            }
+        });
+
+        tvDonor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), VerifyDonor.class);
+                startActivity(intent);
+                getActivity().finish();
+            }
+        });
+
         view.setFocusableInTouchMode(true);
         view.requestFocus();
         view.setOnKeyListener(new View.OnKeyListener() {
@@ -123,6 +159,10 @@ public class FragLogIn extends Fragment {
         passwordE = (EditText) view.findViewById(R.id.etPass);
         signIn = (Button) view.findViewById(R.id.btnSingIn);
         signInOrg = (Button) view.findViewById(R.id.btnSingInOrg) ;
+        tvDonor = (TextView) view.findViewById(R.id.tvVerifyDonor);
+        tvOrg = (TextView) view.findViewById(R.id.tvVerifyOrg);
+        tvForgotPassDonor = (TextView) view.findViewById(R.id.tvForgotPasswordDonor);
+        tvForgotPassOrg = (TextView) view.findViewById(R.id.tvForgotPasswordOrg);
     }
 
 
@@ -188,7 +228,7 @@ public class FragLogIn extends Fragment {
                     getActivity().finish();
                 }else
                 {
-                    Toast.makeText(getActivity(),"Email or Password is wrong",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
                     passwordE.setText("");
                     emailE.setText("");
                 }
@@ -259,7 +299,7 @@ public class FragLogIn extends Fragment {
                     getActivity().finish();
                 }else
                 {
-                    Toast.makeText(getActivity(),"Email or Password is wrong",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),jsonObject.getString("message"),Toast.LENGTH_SHORT).show();
                     passwordE.setText("");
                     emailE.setText("");
                 }

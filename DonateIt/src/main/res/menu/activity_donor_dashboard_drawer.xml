@@ -25,6 +25,10 @@
             android:id="@+id/nav_donationHistory_donor_dashboard"
             android:icon="@drawable/history"
             android:title="Donation History" />
+        <item
+            android:id="@+id/nav_offers_donor_dashboard"
+            android:icon="@drawable/requests"
+            android:title="Offers" />
     </group>
 
     <item android:title="Application">

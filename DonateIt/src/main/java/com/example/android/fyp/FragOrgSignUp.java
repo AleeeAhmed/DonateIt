@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.creativityapps.gmailbackgroundlibrary.BackgroundMail;
 
 import org.json.JSONObject;
 
@@ -46,15 +49,14 @@ public class FragOrgSignUp extends Fragment {
     EditText orgName, orgRegNo, orgEmail, orgPassowrd, orgConfirmPassword;
     Button signUp, signIn;
     SharedPreferences preferences;
+    int randomPIN;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.frag_org_sign_up_screen, container, false);
 
         intializations();
-        preferences = getActivity().getSharedPreferences("HiddenUrl", Context.MODE_PRIVATE);
-        currentUrl = preferences.getString("URL", "");
 
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,12 +69,15 @@ public class FragOrgSignUp extends Fragment {
 
                 if (!email.isEmpty() && !name.isEmpty() && !registrationNo.isEmpty() &&
                          !confirmPassword.isEmpty() && !password.isEmpty()) {
-                    if (password.equals(confirmPassword)) {
-                        Log.i("Debug", "password matched");
-                        new databaseProcessForOrg().execute(name, registrationNo, email, password);
-
+                    if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                        if (password.equals(confirmPassword)) {
+                            Log.i("Debug", "password matched");
+                            new databaseProcessForOrg().execute(name,registrationNo,email,password);
+                        } else {
+                            Toast.makeText(getActivity(), "passwords not matching", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
-                        Toast.makeText(getActivity(), "passwords not matching", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Email format is not correct", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(getActivity(), "Form incomplete.. fill form..", Toast.LENGTH_SHORT).show();
@@ -123,6 +128,8 @@ public class FragOrgSignUp extends Fragment {
 
     private class databaseProcessForOrg extends AsyncTask<String, Void, String> {
 
+        SharedPreferences preferences = getActivity().getSharedPreferences("HiddenUrl", Context.MODE_PRIVATE);
+        String currentUrl = preferences.getString("URL", "");
         @Override
         protected String doInBackground(String... params) {
             String response = "";
@@ -132,8 +139,10 @@ public class FragOrgSignUp extends Fragment {
             String email = params[2];
             String password = params[3];
 
+            randomPIN = (int)(Math.random()*9000)+1000;
+
             String link = currentUrl+"DonateIt/orgSignup.php?email="+email+"&name="+name+
-                    "&registrationNo="+registrationNo+"&password="+password;
+                    "&registrationNo="+registrationNo+"&password="+password+"&verificationNum="+randomPIN;
 
             Log.i("Debug", "values are"+""+name+""+registrationNo+""+email+""+password);
 
@@ -145,7 +154,7 @@ public class FragOrgSignUp extends Fragment {
                 httpURLConnection.connect();
                 int code = httpURLConnection.getResponseCode();
                 InputStream inputStream = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader((inputStream), "iso-8859-1"));
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader((inputStream), "UTF-8"));
 
 
                 String line = "";
@@ -175,16 +184,40 @@ public class FragOrgSignUp extends Fragment {
                 String success = jsonObject.getString("success");
                 if(success.equalsIgnoreCase("true"))
                 {
-                    Toast.makeText(getContext(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
-                    Intent i = new Intent(getContext(), ActivityValidationReg.class);
+                    Toast.makeText(getActivity(), jsonObject.getString("message")+
+                            "... Use your email to verify your account..", Toast.LENGTH_LONG).show();
+
+                    BackgroundMail.newBuilder(getActivity())
+                            .withUsername("waqarfyp@gmail.com")
+                            .withPassword("PAKISTAN@123")
+                            .withMailto(email)
+                            .withType(BackgroundMail.TYPE_PLAIN)
+                            .withSubject("Email Verification DonateIt")
+                            .withBody("Please verify your app using  following data..\n\nEnter this number to verify it..\n\n"+randomPIN)
+                            .withOnSuccessCallback(new BackgroundMail.OnSuccessCallback() {
+                                @Override
+                                public void onSuccess() {
+                                    Toast.makeText(getActivity(), "Verification code is sent to your email..", Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .withOnFailCallback(new BackgroundMail.OnFailCallback() {
+                                @Override
+                                public void onFail() {
+                                    Toast.makeText(getActivity(), "Something went wrong.. Couldn't send you verification email now..", Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .send();
+
+                    Intent i = new Intent(getActivity(), ActivityValidationReg.class);
                     startActivity(i);
                 }else
                 {
-                    Toast.makeText(getContext(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                 }
             }catch (Exception e){e.printStackTrace();}
         }
     }
+
 }
 
 

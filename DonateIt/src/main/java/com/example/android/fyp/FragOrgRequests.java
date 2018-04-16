@@ -15,7 +15,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -55,7 +57,7 @@ public class FragOrgRequests extends Fragment {
     ArrayList<FragOrgRequestsData> dataArrayList = new ArrayList<>();
     View view;
     MyAdapter adapter;
-    String currentUrl;
+    String currentUrl,reqId;
     FloatingActionButton fab;
 
     @Nullable
@@ -79,6 +81,39 @@ public class FragOrgRequests extends Fragment {
         return view;
 
     }
+
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        if (v.getId() == R.id.lvOrgRequests) {
+            AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) menuInfo;
+            FragOrgRequestsData i = (FragOrgRequestsData) adapter.getItem(acmi.position);
+
+            reqId = i.getId();
+
+            menu.add(1,0,0,"Delete");
+
+            //menu.add("Three");
+        }
+    }
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getGroupId()==1){
+            switch (item.getItemId()){
+
+                case 0:{
+                    new deleteRequest(reqId).execute();
+                    break;
+                }
+                default: {}
+            }
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+
 
     class datafetch extends AsyncTask<String,Void,String> {
         String object;
@@ -149,9 +184,68 @@ public class FragOrgRequests extends Fragment {
 
                     adapter = new MyAdapter(getActivity(), dataArrayList);
                     list.setAdapter(adapter);
-
+                    registerForContextMenu(list);
                 } else {
                     Toast.makeText(getActivity(), "No requests found..", Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    class deleteRequest extends AsyncTask<String,Void,String> {
+        String object, reqId;
+        JSONObject jsonObject;
+        JSONArray jsonArray;
+
+        public deleteRequest(String reqId) {
+            this.reqId = reqId;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                String requestUrl = currentUrl + "DonateIt/deleteOrgRequests.php?id="+reqId;
+                URL url = new URL(requestUrl);
+                HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+                InputStream inputStream = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ((JSON_STRING = bufferedReader.readLine())!=null)
+                {
+                    stringBuilder.append(JSON_STRING).append("\n");
+                }
+
+                bufferedReader.close();
+                inputStream.close();
+                httpURLConnection.disconnect();
+
+                object =  stringBuilder.toString().trim();
+                Log.i("debug", "org object is"+""+object );
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return object;
+        }
+        @Override
+        protected void onPostExecute(String result) {
+            Log.i("debug", "org post execute started and result is"+""+result );
+            try {
+                Log.i("debug", "org post got into try" );
+                jsonObject = new JSONObject(result);
+                String success = jsonObject.getString("success");
+
+                if (success.equalsIgnoreCase("true")) {
+                    jsonArray = jsonObject.getJSONArray("results");
+
+                    for (int i = 0; i<jsonArray.length(); i++) {
+                        Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                        new datafetch().execute();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

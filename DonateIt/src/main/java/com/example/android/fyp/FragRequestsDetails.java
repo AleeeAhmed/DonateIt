@@ -48,6 +48,9 @@ public class FragRequestsDetails extends AppCompatActivity {
             public void onClick(View v) {
                 if (!edOfferAmount.getText().toString().trim().isEmpty()) {
                     int ofrAmount = Integer.parseInt(edOfferAmount.getText().toString());
+                    target = tvTarget.getText().toString();
+                    progress = tvProgress.getText().toString();
+
                     if (ofrAmount > (Integer.parseInt(target) - Integer.parseInt(progress))) {
                         Toast.makeText(FragRequestsDetails.this, "we only need "
                                 + (Integer.parseInt(target) - Integer.parseInt(progress)) + " more.", Toast.LENGTH_SHORT).show();

@@ -24,6 +24,8 @@ import android.widget.Toast;
 
 import com.creativityapps.gmailbackgroundlibrary.BackgroundMail;
 
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -190,8 +192,11 @@ public class FragSignUp extends Fragment {
 
         @Override
         protected void onPostExecute(String result) {
+            try {
 
-            if(result.contains("Successful"))
+            JSONObject jsonObject = new JSONObject(result);
+                String success = jsonObject.getString("success");
+            if(success.equalsIgnoreCase("true"))
             {
                 Toast.makeText(getActivity(), "Sign Up Successfully", Toast.LENGTH_SHORT).show();
 
@@ -222,9 +227,10 @@ public class FragSignUp extends Fragment {
 
             }else
             {
-                Toast.makeText(getActivity(), "Sign Up Failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
             }
 
+            }catch (Exception e){e.printStackTrace();}
         }
     }
 

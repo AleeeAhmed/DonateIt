@@ -69,16 +69,17 @@ public class FragRequests extends Fragment {
 
         list = (ListView)  view.findViewById(R.id.listDonorRequests);
         edSearch = view.findViewById(R.id.edSearchDonorRequests);
-        edSearch.addTextChangedListener(new TextWatcher() {
+        edSearch.addTextChangedListener(new TextWatcher() { //adding text change listner so when each word is entered or removed this method is called
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String text = edSearch.getText().toString().toLowerCase(Locale.getDefault());
-                adapter.filter(text);            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) { //adding code here to call when search bar changes
+                String text = edSearch.getText().toString().toLowerCase(Locale.getDefault()); ///getting text from search bar
+                adapter.filter(text);// calling adapters filter method
+                }
             @Override
             public void afterTextChanged(Editable s) {
 
@@ -268,21 +269,21 @@ public class FragRequests extends Fragment {
         }
 
         private void filter(String charText) {
-            charText = charText.toLowerCase(Locale.getDefault());
-            arrayList.clear();
+            charText = charText.toLowerCase(Locale.getDefault()); //converting text to search into lowercase
+            arrayList.clear();  //clearing listview, so to add items that matches search characters
             if (charText.length() == 0) {
-                arrayList.addAll(list);
+                arrayList.addAll(list); //adding all items if search characters are deleted(back spaced all)
             }
             else
             {
-                for (FragRequestsData data : list)
+                for (FragRequestsData data : list) //picking item one by one from list
                 {
-                    if (data.getKeyword().toLowerCase(Locale.getDefault()).contains(charText)){
-                        arrayList.add(data);
+                    if (data.getKeyword().toLowerCase(Locale.getDefault()).contains(charText)){ //convert item to lower case and match with search bar characters
+                        arrayList.add(data); //adding matching items into list again, so they are visible
                     }
                 }
             }
-            notifyDataSetChanged();
+            notifyDataSetChanged(); // notifying to show data
         }
     }
 
